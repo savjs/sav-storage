@@ -2,6 +2,16 @@ import test from 'ava'
 import {Storage} from '../'
 import {isFunction} from 'sav-util'
 
-test('Storage#api', ava => {
+test('Storage#storage', ava => {
   ava.true(isFunction(Storage))
+  let storage = new Storage()
+  ava.true(isFunction(storage.use))
+  ava.true(isFunction(storage.provider))
+  ava.true(isFunction(storage.get))
+  ava.true(isFunction(storage.has))
+  ava.true(isFunction(storage.remove))
+  ava.true(isFunction(storage.set))
+  ava.true(isFunction(storage.clear))
+  ava.true(isFunction(storage.module))
+  ava.true(isFunction(storage._prefix))
 })
