@@ -1,4 +1,9 @@
 # sav-storage
 storage layer for savjs
 
-Storage.has('key')
+# Installation
+### NPM
+
+```bash
+$ npm install sav-storage
+```
