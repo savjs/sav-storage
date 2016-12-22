@@ -1,8 +1,10 @@
-/* global localStorage */
-export default {
+export class MemoryProvider {
+  constructor (store) {
+    this.store = store || {}
+  }
   get (key) {
-    if (localStorage.hasOwnProperty(key)) {
-      let data = localStorage.getItem(key)
+    if (key in this.store) {
+      let data = this.store[key]
       switch (data) {
         case 'null':
           return null
@@ -13,31 +15,31 @@ export default {
           return JSON.parse(data)
       }
     }
-  },
+  }
   set (key, value) {
-    localStorage.setItem(key, JSON.stringify(value))
-  },
+    this.store[key] = JSON.stringify(value)
+  }
   has (key) {
-    return localStorage.hasOwnProperty(key)
-  },
+    return key in this.store
+  }
   remove (key) {
-    localStorage.removeItem(key)
-  },
+    delete this.store[key]
+  }
   clear (path, skips) {
-    let store = localStorage
+    let store = this.store
     let pathLen = path.length
     if (skips && skips.length) {
       for (let key in store) {
         if (key.indexOf(path) === 0) {
           if (skips.indexOf(key.substr(pathLen, key.length)) === -1) {
-            store.removeItem(key)
+            delete store[key]
           }
         }
       }
     } else {
       for (let key in store) {
         if (key.indexOf(path) === 0) {
-          store.removeItem(key)
+          delete store[key]
         }
       }
     }

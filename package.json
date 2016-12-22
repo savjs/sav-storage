@@ -1,6 +1,6 @@
 {
   "name": "sav-storage",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "storage for savjs",
   "main": "dist/sav-storage.cjs.js",
   "module": "dist/sav-storage.es.js",
@@ -35,6 +35,6 @@
   },
   "homepage": "https://github.com/savjs/sav-storage#readme",
   "dependencies": {
-    "sav-util": "^0.0.3"
+    "sav-util": "^0.0.8"
   }
 }
