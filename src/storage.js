@@ -20,7 +20,7 @@ Storage.prototype.use = function (fn, opts) {
   return this
 }
 
-Storage.prototype.provider = function (provider) {
+Storage.prototype.setProvider = Storage.prototype.provider = function (provider) {
   this._p.provider = provider
   return this
 }
