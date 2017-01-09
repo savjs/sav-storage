@@ -22,7 +22,7 @@ export class AsyncStorage {
   }
   // private util
   path (key) {
-    return this._prefix + this._module + key
+    return this._prefix + this._module + (key || '')
   }
   // public api
   get (key) {

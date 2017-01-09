@@ -11,3 +11,4 @@ export {localProvider}
 
 export * from './asyncStorage'
 export * from './memoryProvider'
+export * from './nativeProvider'

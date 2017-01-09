@@ -46,7 +46,7 @@ Storage.prototype.set = function (key, value) {
 }
 
 Storage.prototype._prefix = function (key) {
-  return this._p.prefix + this._p.module + key
+  return this._p.prefix + this._p.module + (key || '')
 }
 
 Storage.prototype.clear = function (key, skips) {
