@@ -33,7 +33,11 @@ export class NativeProvider {
     })
   }
   set (key, value) {
-    return this.provider.setItem(key, JSON.stringify(value))
+    let val = JSON.stringify(value)
+    if (val === undefined) {
+      val = 'undefined'
+    }
+    return this.provider.setItem(key, val)
   }
   has (key) {
     return this.provider.getItem(key).then((data) => {
