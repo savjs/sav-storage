@@ -15,16 +15,21 @@ export class NativeProvider {
   }
   get (key) {
     return this.provider.getItem(key).then((data) => {
+      let ret
       switch (data) {
         case 'null':
         case null:
-          return null
+          ret = null
+          break
         case 'undefined':
         case undefined:
-          return undefined
+          ret = undefined
+          break
         default:
-          return JSON.parse(data)
+          ret = JSON.parse(data)
+          break
       }
+      return Promise.resolve(ret)
     })
   }
   set (key, value) {
@@ -68,7 +73,11 @@ export class NativeProvider {
           }
         })
       }
-      return this.provider.multiRemove(keys)
+      if (keys.length) {
+        return this.provider.multiRemove(keys)
+      } else {
+        return Promise.resolve(keys)
+      }
     })
   }
 }
