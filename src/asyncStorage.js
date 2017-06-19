@@ -25,17 +25,39 @@ export class AsyncStorage {
     return this._prefix + this._module + (key || '')
   }
   // public api
-  get (key) {
-    return this._provider.get(this.path(key))
+  get (key, id) {
+    let obj = this._provider.get(this.path(key))
+    return arguments.length === 2 ? obj[id].value : obj
   }
-  set (key, value) {
-    return this._provider.set(this.path(key), value)
+  set (key, value, id) {
+    if (arguments.length === 3) {
+      let obj = this.get(key) || {}
+      if (!obj) obj = {}
+      obj[id] = {
+        value: value,
+        expires: +Date.now()
+      }
+      this.set(key, obj)
+    } else {
+      return this._provider.set(this.path(key), value)
+    }
   }
   has (key) {
     return this._provider.has(this.path(key))
   }
-  remove (key) {
-    return this._provider.remove(this.path(key))
+  remove (key, expires) {
+    if (arguments.length === 2) {
+      let obj = this.get(key) || {}
+      if (!obj || !Object.keys(obj).length) return
+      Object.keys(obj).forEach((kye) => {
+        if (obj[kye].expires < expires) {
+          delete obj[kye]
+        }
+      })
+      !Object.keys(obj).length ? this.remove(key) : this.set(key, obj)
+    } else {
+      return this._provider.remove(this.path(key))
+    }
   }
   clear (path, skips) {
     return this._provider.clear(this.path(path), skips)
