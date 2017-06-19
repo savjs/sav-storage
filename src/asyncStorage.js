@@ -27,7 +27,7 @@ export class AsyncStorage {
   // public api
   get (key, id) {
     let obj = this._provider.get(this.path(key))
-    if(arguments.length ===2) {
+    if (arguments.length === 2) {
       return obj[id] ? obj[id].value : null
     } else {
       return obj
