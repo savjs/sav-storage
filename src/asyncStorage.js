@@ -24,24 +24,40 @@ export class AsyncStorage {
   path (key) {
     return this._prefix + this._module + (key || '')
   }
+
+  isExpires (o, key, expires) {
+    Object.keys(o).forEach((kye) => {
+      if (o[kye].expires < expires) {
+        delete o[kye]
+      }
+    })
+    !Object.keys(o).length ? this.remove(key) : this.set(key, o)
+  }
+
   // public api
   get (key, id) {
     let obj = this._provider.get(this.path(key))
     if (arguments.length === 2) {
-      return obj[id] ? obj[id].value : null
+      return obj.then((o) => {
+        if (!o) {
+          return null
+        }
+        return o[id] ? o[id].value : null
+      })
     } else {
       return obj
     }
   }
   set (key, value, id) {
     if (arguments.length === 3) {
-      let obj = this.get(key) || {}
-      if (!obj) obj = {}
-      obj[id] = {
-        value: value,
-        expires: +Date.now()
-      }
-      this.set(key, obj)
+      this.get(key).then((o) => {
+        if (!o) o = {}
+        o[id] = {
+          value: value,
+          expires: +Date.now()
+        }
+        return this._provider.set(this.path(key), o)
+      })
     } else {
       return this._provider.set(this.path(key), value)
     }
@@ -51,14 +67,10 @@ export class AsyncStorage {
   }
   remove (key, expires) {
     if (arguments.length === 2) {
-      let obj = this.get(key) || {}
-      if (!obj || !Object.keys(obj).length) return
-      Object.keys(obj).forEach((kye) => {
-        if (obj[kye].expires < expires) {
-          delete obj[kye]
-        }
+      this.get(key).then((o) => {
+        if (!o) return null
+        this.isExpires(o, key, expires)
       })
-      !Object.keys(obj).length ? this.remove(key) : this.set(key, obj)
     } else {
       return this._provider.remove(this.path(key))
     }
