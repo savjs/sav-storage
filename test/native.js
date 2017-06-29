@@ -1,5 +1,8 @@
 import test from 'ava'
-import {AsyncStorage, toAsyncProvider, MemoryProvider, NativeProvider} from '../'
+import fs from 'fs'
+import path from 'path'
+
+import {AsyncStorage, toAsyncProvider, MemoryProvider, NativeProvider, NodeProvider} from '../'
 
 test('AsyncStorage', async (ava) => {
   let storage = new AsyncStorage()
@@ -33,7 +36,32 @@ test('AsyncStorage', async (ava) => {
   ava.deepEqual(await storage.get('c'), {x: 1})
 
   await storage.clear()
-  let c = await storage.get('c')
-  console.info(c)
+  ava.is(await storage.has('c'), false)
+})
+
+test('NodeProvider', async (ava) => {
+  let storage = new AsyncStorage()
+  let provider = NodeProvider({
+    fs,
+    path,
+    root: path.resolve(__dirname, 'fixtures/cache')
+  })
+  storage.setProvider(new NativeProvider(provider))
+
+  await storage.set('a', 1)
+  ava.is(await storage.has('a'), true)
+  await storage.remove('a')
+  ava.is(await storage.has('a'), false)
+
+  await storage.set('b', 'b')
+  await storage.set('b', [])
+  await storage.set('b', [1])
+  ava.is(await storage.has('b'), true)
+  ava.deepEqual(await storage.get('b'), [1])
+
+  await storage.set('c', {x: 1})
+  ava.deepEqual(await storage.get('c'), {x: 1})
+
+  await storage.clear('', ['.gitkeep'])
   ava.is(await storage.has('c'), false)
 })
