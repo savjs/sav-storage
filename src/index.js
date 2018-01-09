@@ -10,6 +10,8 @@ import localProvider from './localProvider.js'
 export {localProvider}
 
 export * from './asyncStorage'
+export * from './idbStorage'
 export * from './memoryProvider'
 export * from './nativeProvider'
 export * from './nodeProvider'
+
