@@ -16,6 +16,12 @@ async function init() {
   storage.get('lesson').then((res) => {
     console.log(res)
   })
+
+  storage.keys().then(res =>  console.log(res))
+
+  storage.has('city').then(res => {
+    console.log(res)
+  })
 }
 
 init()
