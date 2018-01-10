@@ -66,22 +66,13 @@ export class IDBStorage {
     return this.tr((os) => os.getAllKeys())
   }
 
-  has (key) {
-    return this.keys().then(keys => {
-      let i = 0
-      let len = keys.length
-      for (i; i < len; i++) {
-        if (key === keys[i]) {
-          return true
-        }
+  async has (key) {
+    let keys = await this.keys()
+    for (let k of keys) {
+      if (k === key) {
+        return true
       }
-      return false
-      // for(let k of keys) {
-      //   if(k === key) {
-      //     return true
-      //   }
-      // }
-      // return false
-    })
+    }
+    return false
   }
 }
