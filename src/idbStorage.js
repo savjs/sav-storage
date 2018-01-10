@@ -1,15 +1,16 @@
 export class IDBStorage {
-  constructor () {
+  constructor (opts) {
+    this.opts = Object.assign({name: 'sav-storage', version: 1}, opts)
     this.tr = null
   }
 
-  openIDB (dbname) {
+  openIDB () {
     return new Promise((resolve, reject) => {
-      const DBOpenRequest = window.indexedDB.open(dbname, 1)
+      const DBOpenRequest = window.indexedDB.open(this.opts.name, this.opts.version)
       DBOpenRequest.onupgradeneeded = (event) => {
         let db = event.target.result
-        if (!db.objectStoreNames.contains(dbname)) {
-          db.createObjectStore(dbname)
+        if (!db.objectStoreNames.contains(this.opts.name)) {
+          db.createObjectStore(this.opts.name)
         }
       }
 
@@ -20,9 +21,9 @@ export class IDBStorage {
 
       DBOpenRequest.onsuccess = () => {
         let db = DBOpenRequest.result
-        this.tr = (fn) => {
+        let tr = (fn) => {
           return new Promise((resolve, reject) => {
-            let store = db.transaction([dbname], 'readwrite').objectStore(dbname)
+            let store = db.transaction([this.opts.name], 'readwrite').objectStore(this.opts.name)
             let ret = fn(store)
             ret.onsuccess = function () {
               console.debug('success')
@@ -33,12 +34,19 @@ export class IDBStorage {
             }
           })
         }
-        resolve(this)
+        resolve(tr)
       }
     })
   }
 
-  set (key, value) {
+  async getTr () {
+    if (!this.tr) {
+      this.tr = await this.openIDB()
+    }
+  }
+
+  async set (key, value) {
+    await this.getTr()
     return this.tr((os) => os.put(value, key)).then(ret => {
       if (ret) {
         return ret
@@ -46,7 +54,8 @@ export class IDBStorage {
     })
   }
 
-  get (key) {
+  async get (key) {
+    await this.getTr()
     return this.tr((os) => os.get(key)).then(ret => {
       if (ret) {
         return ret
@@ -54,7 +63,8 @@ export class IDBStorage {
     })
   }
 
-  remove (key) {
+  async remove (key) {
+    await this.getTr()
     return this.tr((os) => os.delete(key)).then(ret => {
       if (ret) {
         return ret
@@ -62,7 +72,8 @@ export class IDBStorage {
     })
   }
 
-  keys () {
+  async keys () {
+    await this.getTr()
     return this.tr((os) => os.getAllKeys())
   }
 
