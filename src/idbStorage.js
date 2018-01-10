@@ -1,9 +1,9 @@
 export class IDBStorage {
-  constructor() {
+  constructor () {
     this.tr = null
   }
 
-  openIDB(dbname) {
+  openIDB (dbname) {
     return new Promise((resolve, reject) => {
       const DBOpenRequest = window.indexedDB.open(dbname, 1)
       DBOpenRequest.onupgradeneeded = (event) => {
@@ -38,7 +38,7 @@ export class IDBStorage {
     })
   }
 
-  set(key, value) {
+  set (key, value) {
     return this.tr((os) => os.put(value, key)).then(ret => {
       if (ret) {
         return ret
@@ -46,7 +46,7 @@ export class IDBStorage {
     })
   }
 
-  get(key) {
+  get (key) {
     return this.tr((os) => os.get(key)).then(ret => {
       if (ret) {
         return ret
@@ -54,7 +54,7 @@ export class IDBStorage {
     })
   }
 
-  remove(key) {
+  remove (key) {
     return this.tr((os) => os.delete(key)).then(ret => {
       if (ret) {
         return ret
@@ -62,11 +62,11 @@ export class IDBStorage {
     })
   }
 
-  keys() {
+  keys () {
     return this.tr((os) => os.getAllKeys())
   }
 
-  has(key) {
+  has (key) {
     return this.keys().then(keys => {
       let i = 0
       let len = keys.length
@@ -84,5 +84,4 @@ export class IDBStorage {
       // return false
     })
   }
-
 }
