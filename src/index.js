@@ -7,7 +7,8 @@
 export * from './storage.js'
 
 import localProvider from './localProvider.js'
-export {localProvider}
+import idbProvider from './idbProvider.js'
+export {localProvider, idbProvider}
 
 export * from './asyncStorage'
 export * from './idbStorage'
