@@ -61,6 +61,24 @@ export default {
     })
   },
 
+  async getAll () {
+    await this.getTr()
+    return this.tr((os) => os.getAll()).then(ret => {
+      if (ret) {
+        return ret
+      }
+    })
+  },
+
+  async getAllKeys () {
+    await this.getTr()
+    return this.tr((os) => os.getAllKeys()).then(ret => {
+      if (ret) {
+        return ret
+      }
+    })
+  },
+
   async remove (key) {
     await this.getTr()
     return this.tr((os) => os.delete(key)).then(ret => {
