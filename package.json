@@ -1,6 +1,6 @@
 {
   "name": "sav-storage",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "storage for savjs",
   "main": "dist/sav-storage.cjs.js",
   "module": "dist/sav-storage.es.js",

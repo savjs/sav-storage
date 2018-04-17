@@ -1,5 +1,6 @@
 export default {
   opts: {name: 'sav-storage', version: 1},
+  tr: null,
   setIDB (opts) {
     this.opts = Object.assign(this.opts, opts)
   },
@@ -37,57 +38,55 @@ export default {
       }
     })
   },
-  get tr () {
-    if (!this._tr) {
-      this._tr = this.openIDB()
+  async getTr () {
+    if (!this.tr) {
+      this.tr = await this.openIDB()
     }
-    return this._tr
   },
-
-  set (key, value) {
+  async set (key, value) {
+    await this.getTr()
     return this.tr((os) => os.put(value, key)).then(ret => {
       if (ret) {
         return ret
       }
     })
   },
-
-  get (key) {
+  async get (key) {
+    await this.getTr()
     return this.tr((os) => os.get(key)).then(ret => {
       if (ret) {
         return ret
       }
     })
   },
-
-  getAll () {
+  async getAll () {
+    await this.getTr()
     return this.tr((os) => os.getAll()).then(ret => {
       if (ret) {
         return ret
       }
     })
   },
-
-  getAllKeys () {
+  async getAllKeys () {
+    await this.getTr()
     return this.tr((os) => os.getAllKeys()).then(ret => {
       if (ret) {
         return ret
       }
     })
   },
-
-  remove (key) {
+  async remove (key) {
+    await this.getTr()
     return this.tr((os) => os.delete(key)).then(ret => {
       if (ret) {
         return ret
       }
     })
   },
-
-  keys () {
+  async keys () {
+    await this.getTr()
     return this.tr((os) => os.getAllKeys())
   },
-
   async has (key) {
     let keys = await this.keys()
     for (let k of keys) {
