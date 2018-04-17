@@ -2,6 +2,7 @@ var {AsyncStorage, localProvider, toAsyncProvider, idbProvider} = require('../di
 var storage = new AsyncStorage()
 idbProvider.setIDB({name:'hfjy-idb', version:10})
 storage.setProvider(toAsyncProvider(idbProvider))
+
 storage.set('city', {name:'sh', code:'021'}, 111)
 storage.set('city', {name:'sz', code:'0755'}, 222)
 storage.set('city', {name:'bj', code:'010'}, 333)
