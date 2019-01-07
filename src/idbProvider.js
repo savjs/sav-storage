@@ -26,7 +26,7 @@ export default {
             let store = db.transaction([this.opts.name], 'readwrite').objectStore(this.opts.name)
             let ret = fn(store)
             ret.onsuccess = function () {
-              console.debug('success')
+              // console.debug('success')
               resolve(this.result)
             }
             ret.onerror = function (evt) {
