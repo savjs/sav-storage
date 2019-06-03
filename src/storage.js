@@ -1,8 +1,3 @@
-/*
- * @Description     存储接口
- * @File       storage.js
- * @Auth       jetiny@hfjy.com
- */
 
 import {prop, isFunction} from 'sav-util'
 
